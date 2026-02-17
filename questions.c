@@ -8,7 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
+#include <stdbool.h>
 #include "questions.h"
+
+question questions[NUM_QUESTIONS];
 
 // Initializes the array of questions for the game
 void initialize_game(void) {
@@ -116,26 +120,53 @@ void initialize_game(void) {
 
 // Displays each of the remaining categories and question dollar values that have not been answered
 void display_categories(void) {
+	printf("\n--- Jeopardy Board ---\n");
+	for (int i = 0; i < NUM_CATEGORIES; i++) {
+		printf("%s: ", categories[i]);
 
+		for (int j = 0; j < NUM_QUESTIONS; j++) {
+			if (strcmp(questions[j].category, categories[i]) == 0 && !questions[j].answered) {
+			printf("%d ", questions[j].value);
+			}
+		}
+		printf("\n");
+	}
     // print categories and dollar values for each unanswered question in questions array
 }
 
 // Displays the question for the category and dollar value
-void display_question(char *category, int value)
-{
-
+void display_question(char *category, int value) {
+	for (int i = 0; i < NUM_QUESTIONS; i++) {
+		if (strcmp(questions[i].category, category) == 0 && questions[i].value == value) {
+		printf("\nQuestion: %s\n", questions[i].question);
+		return;
+		}
+	}
 }
 
 // Returns true if the answer is correct for the question for that category and dollar value
-bool valid_answer(char *category, int value, char *answer)
-{
+bool valid_answer(char *category, int value, char *answer) {
+	for (int i = 0; i < NUM_QUESTIONS; i++) {
+		if (strcmp(questions[i].category, category) == 0 && questions[i].value == value) {
+			if (strcasecmp(questions[i].answer, answer) == 0) {
+				questions[i].answered = true;
+				return true;
+			}
+			questions[i].answered = true;
+			return false;
+		}
+	}
     // Look into string comparison functions
     return false;
 }
 
 // Returns true if the question has already been answered
-bool already_answered(char *category, int value)
-{
+bool already_answered(char *category, int value) {
+	for (int i = 0; i < NUM_QUESTIONS; i++) {
+		if (strcmp(questions[i].category, category) == 0 && questions[i].value == value) {
+			return questions[i].answered;
+		}
+	}
     // lookup the question and see if it's already been marked as answered
-    return false;
+    return true;
 }
