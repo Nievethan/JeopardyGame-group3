@@ -1,7 +1,7 @@
 /*
  * Tutorial 4 Jeopardy Project for SOFE 3950U: Operating Systems
  *
- * Copyright (C) 2026, <GROUP NUMBER>
+ * Copyright (C) 2026, <GROUP 3>
  * All rights reserved.
  *
  */
@@ -34,7 +34,7 @@ typedef struct {
 
 // An array of 12 questions (4 for each category), initialized in initialize_game
 // this may need to be a pointer if you want it set dynamically
-question questions[NUM_QUESTIONS];
+extern question questions[NUM_QUESTIONS];
 
 // Initializes the array of questions for the game
 extern void initialize_game(void);
