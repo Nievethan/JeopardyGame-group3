@@ -24,7 +24,7 @@ bool player_exists(player *players, int num_players, char *name) {
 // Go through the list of players and update the score for the 
 // player given their name
 void update_score(player *players, int num_players, char *name, int score) {
-	for (int = 0; i < num_players; i++) {
+	for (int i = 0; i < num_players; i++) {
 		if (strcasecmp(players[i].name, name) == 0) {
 			players[i].score += score;
 			return;

@@ -12,7 +12,7 @@
 #include "questions.h"
 #include "players.h"
 #include "jeopardy.h"
-
+#include <ctype.h>
 
 #define BUFFER_LEN 256
 #define NUM_PLAYERS 4
@@ -39,7 +39,7 @@ void tokenize(char *input, char **tokens){ // Extracts the actual answer after "
 
 
   for(int i= 0; temp[i]; i++)
-    temp[i] = (char)tolower((unsinged char)temp[i]);
+    temp[i] = (char)tolower((unsigned char)temp[i]);
 
   if (strncmp(temp, "what is", 7) == 0)
         input += 7;
@@ -95,8 +95,20 @@ void show_results(player *players, int num_players){
         printf("%d) %s - %d\n", i + 1, sorted[i].name, sorted[i].score);
 }
 
+static int question_exists(char *category, int value)
+{
+    for (int i = 0; i < NUM_QUESTIONS; i++)
+    {
+        if (strcmp(questions[i].category, category) == 0 &&
+            questions[i].value == value)
+        {
+            return 1;  // found
+        }
+    }
+    return 0;  // not found
+}
 
-int main(int argc, char *argv[]){
+int main(void){
    player players[NUM_PLAYERS];
 
     // Input buffer
@@ -156,11 +168,17 @@ int main(int argc, char *argv[]){
         fgets(category, BUFFER_LEN, stdin);
         category[strcspn(category, "\n")] = '\0';
 
-        printf("Value (100/200/300/400): ");
+        printf("Value : ");
         fgets(value_str, BUFFER_LEN, stdin);
         value_str[strcspn(value_str, "\n")] = '\0';
 
         value = atoi(value_str);
+
+
+        if (!question_exists(category, value)){
+          printf("Invalid category or value.\n");
+          continue;
+        }
 
         if (already_answered(category, value))
         {
